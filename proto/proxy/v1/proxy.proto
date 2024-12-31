@@ -13,7 +13,7 @@ service ProxyService {
   rpc SubscribeAcl(SubscribeAclRequest) returns(SubscribeAclReply);
 
   rpc OnConnected(OnConnectedRequest) returns (OnConnectedReply);
- 
+
   rpc OnSubscribe(OnSubscribeRequest) returns (OnSubscribeReply);
 
   rpc OnUnsubscribe(OnUnsubscribeRequest) returns(OnUnsubscribeReply);
@@ -36,7 +36,8 @@ message RPCRequest {
   }
   uint64 id = 1;
   string topic = 2;
-  Metadata metadata = 3;
+  string method = 3;
+  Metadata metadata = 4;
   bytes payload = 5;
 }
 
