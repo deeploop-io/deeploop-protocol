@@ -62,8 +62,9 @@ message RPCRequest {
     string lb_key = 2;
   }
   string topic = 1;
-  Metadata metadata = 2;
-  bytes payload = 3;
+  string method = 2;
+  Metadata metadata = 3;
+  bytes payload = 4;
 }
 
 message RPCReply {
@@ -72,19 +73,23 @@ message RPCReply {
 }
 
 message Poll {
-  string topic = 1;
-  uint64 offset = 2;
+  message Offset {
+    string topic = 1;
+    uint64 offset = 2;
+  }
+
+  repeated Offset offsets = 1;
+}
+
+message Message {
+  uint64 id = 1;
+  string type = 2;
+  deeploop.common.v1.QoS qos = 3;
+  uint64 offset = 4;
+  bytes payload = 5;
 }
 
 message Publication {
-  message Message {
-    uint64 id = 1;
-    uint64 time = 2;
-    uint64 offset = 3;
-    deeploop.common.v1.QoS qos = 4;
-    bytes payload = 5;
-  }
-
   string topic = 1;
   deeploop.common.v1.QoS qos = 2;
   repeated Message envelopes = 3;
