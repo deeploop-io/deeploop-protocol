@@ -81,6 +81,7 @@ message Publication {
     uint64 id = 1;
     uint64 time = 2;
     uint64 offset = 3;
+    deeploop.common.v1.QoS qos = 4;
     bytes payload = 5;
   }
 
