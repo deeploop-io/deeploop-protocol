@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package deeploop.cluster.v1;
+
+option go_package = "github.com/deeploop-io/deeploop-protocol/genproto/cluster/v1;clusterv1";
+
+import "common/v1/common.proto";
+
+message ClusterPublishMessage {
+
+  uint64 id = 1;
+  string topic = 2;
+  uint64 sender = 3;
+  deeploop.common.v1.QoS qos = 4;
+  bytes payload = 5;
+}
+
+message ClientPublishMessage {
+  uint64 id = 1;
+  string topic = 2;
+  uint64 sender = 3;
+  deeploop.common.v1.QoS qos = 4;
+  bytes payload = 5;
+}
+
+message SendMessage {
+  uint64 id = 1;
+  string topic = 2;
+  uint64 time = 3;
+  uint64 offset = 4;
+  deeploop.common.v1.QoS qos = 5;
+  repeated string node_ids = 6;
+  bytes payload = 7;
+}
+
+message KeepAliveMessage {
+  uint64 session_id = 1;
+  uint64 time = 2;
+}
+
+message SubscribeRequest {
+  uint64 session_id = 1;
+  repeated string topics = 2;
+}
+
+message SubscribeResult {
+  string error = 1;
+  map<string, uint32> subscriptions = 2;
+}
+
+message UnsubscribeRequest {
+  uint64 session_id = 1;
+  repeated string topics = 2;
+}
+
+message UnsubscribeResult {
+  string error = 1;
+  map<string, uint32> subscriptions = 2;
+}
+
+
+message PingTick {
+}

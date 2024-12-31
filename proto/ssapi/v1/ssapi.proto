@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package deeploop.ssapi.v1;
+
+option go_package = "github.com/deeploop-io/deeploop-protocol/genproto/ssapi/v1;ssapiv1";
+
+service ServerSideService {
+  rpc Publish(PublishRequest) returns(PublishReply);
+  rpc Disconnect(DisconnectRequest) returns(DisconnectReply);
+  rpc Subscribe(SubscribeRequest) returns(SubscribeReply);
+  rpc Unsubscribe(SubscribeRequest) returns(UnsubscribeReply);
+}
+
+message PublishRequest {
+  uint64 id = 1;
+  string topic = 2;
+  string type = 3;
+  map<string, string> headers = 4;
+  bytes body = 5;
+}
+
+message PublishReply {
+
+}
+
+message DisconnectRequest {
+}
+
+message DisconnectReply {
+
+}
+
+message SubscribeRequest {
+}
+
+message SubscribeReply {
+}
+
+message UnsubscribeRequest {
+}
+
+message UnsubscribeReply {
+}

@@ -1,0 +1,95 @@
+syntax = "proto3";
+
+package deeploop.proxy.v1;
+
+option go_package = "github.com/deeploop-io/deeploop-protocol/genproto/proxy/v1;proxyv1";
+
+service ProxyService {
+  // 远程调用
+  rpc RPC(RPCRequest) returns(RPCReply);
+  // 认证
+  rpc Authenticate(AuthenticateRequest) returns(AuthenticateReply);
+  // 订阅权限校验
+  rpc SubscribeAcl(SubscribeAclRequest) returns(SubscribeAclReply);
+
+  rpc OnSubscribe(OnSubscribeRequest) returns (OnSubscribeReply);
+
+  rpc OnUnsubscribe(OnUnsubscribeRequest) returns(OnUnsubscribeReply);
+
+  rpc OnDisconnect(OnDisconnectRequest) returns(OnDisconnectReply);
+}
+
+
+message Error {
+  int32 code = 1;
+  string message = 2;
+  bool temporary = 3;
+  map<string, string> metadata = 4;
+}
+
+message RPCRequest {
+  message Metadata {
+    string balancer = 1;
+    string key = 2;
+  }
+  uint64 id = 1;
+  string topic = 2;
+  Metadata metadata = 3;
+  bytes payload = 5;
+}
+
+message RPCReply {
+  uint64 id = 1;
+  Error error = 2;
+  bytes payload = 3;
+}
+
+message AuthenticateRequest {
+  string username = 1;
+  string password = 2;
+  string client_type = 3;
+  string client_id = 4;
+}
+
+message AuthenticateReply {
+  Error error = 1;
+  UserInfo user_info = 2;
+}
+
+message UserInfo {
+  string id = 1;
+  string username = 2;
+  string token = 3;
+  string client_type = 4;
+  string client_id = 5;
+}
+
+message SubscribeAclRequest {
+
+}
+message SubscribeAclReply {
+
+}
+
+
+message OnSubscribeRequest {
+
+}
+message OnSubscribeReply {
+
+}
+
+message OnUnsubscribeRequest {
+
+}
+
+message OnUnsubscribeReply {
+
+}
+
+message OnDisconnectRequest {
+
+}
+message OnDisconnectReply {
+
+}

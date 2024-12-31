@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package deeploop.common.v1;
+
+option go_package = "github.com/deeploop-io/deeploop-protocol/genproto/common/v1;commonv1";
+
+enum QoS {
+  AtMostOnce = 0;
+  AtLeastOnce = 1;
+}
+
+
+message Error {
+  int32 code = 1;
+  string message = 2;
+  bool temporary = 3;
+  map<string, string> metadata = 4;
+}

@@ -1,0 +1,161 @@
+syntax = "proto3";
+
+package deeploop.client.v1;
+
+option go_package = "github.com/deeploop-io/deeploop-protocol/genproto/client/v1;clientv1";
+
+import "common/v1/common.proto";
+
+service DeeploopService {
+  // 核心双向数据流
+  rpc MessageLoop(stream InboundMessage) returns (stream OutboundMessage);
+  rpc MessagePush(Connect) returns (stream PushMessage);
+}
+
+message Connect {
+  repeated Subscription subscriptions = 1;
+}
+
+message PushMessage {
+  uint64 id = 1;
+  map<string, string> headers = 2;
+  oneof body {
+    Connected connected = 3;
+    Ping ping = 4;
+    Publication publication = 11;
+  }
+}
+
+message InboundMessage {
+  uint64 id = 1;
+  map<string, string> headers = 4;
+  oneof body {
+    RPCRequest rpc_request = 5;
+    Subscribe subscribe = 6;
+    Unsubscribe unsubscribe = 7;
+    Ping ping = 8;
+    Pong pong = 9;
+    Publish publish = 10;
+    Poll poll = 11;
+  }
+}
+
+message OutboundMessage {
+  uint64 id = 1;
+  map<string, string> headers = 3;
+  oneof body {
+    deeploop.common.v1.Error error = 4;
+    Connected connected = 5;
+    RPCReply rpc_reply = 6;
+    SubscribeAck subscribe_ack = 7;
+    UnsubscribeAck unsubscribe_ack = 8;
+    Ping ping = 9;
+    Pong pong = 10;
+    Publication publication = 11;
+    PublishAck publish_ack = 12;
+  }
+}
+
+message RPCRequest {
+  message Metadata {
+    string lb_policy = 1;
+    string lb_key = 2;
+  }
+  string topic = 1;
+  Metadata metadata = 2;
+  bytes payload = 3;
+}
+
+message RPCReply {
+  deeploop.common.v1.Error error = 1;
+  bytes payload = 2;
+}
+
+message Poll {
+  string topic = 1;
+  uint64 offset = 2;
+}
+
+message Publication {
+  message Message {
+    uint64 id = 1;
+    uint64 time = 2;
+    uint64 offset = 3;
+    bytes payload = 5;
+  }
+
+  string topic = 1;
+  deeploop.common.v1.QoS qos = 2;
+  repeated Message envelopes = 3;
+}
+
+message Connected {
+  uint64 session_id = 1;
+  repeated Subscription subscriptions = 2;
+  repeated Publication publications = 3;
+}
+
+message Subscription {
+  string topic = 1;
+  string token = 2;
+}
+
+message Subscribe {
+  message Subscription {
+    string topic = 1;
+    string token = 2;
+  }
+  repeated Subscription subscriptions = 1;
+}
+
+message SubscribeAck {
+  message Subscription {
+    uint64 id = 1;
+    string topic = 2;
+  }
+
+  repeated Subscription subscriptions = 1;
+}
+
+message Unsubscribe {
+  message Subscription {
+    string topic = 1;
+  }
+
+  repeated Subscription subscriptions = 1;
+}
+
+message UnsubscribeAck {
+
+  message Subscription {
+    string topic = 1;
+  }
+
+  repeated Subscription subscriptions = 1;
+}
+
+message RefreshSub {
+  message Subscription {
+    string topic = 1;
+    string token = 2;
+  }
+
+  repeated Subscription subscriptions = 1;
+}
+
+message Ping {
+}
+
+message Pong {
+}
+
+message Publish {
+  string topic = 2;
+  deeploop.common.v1.QoS qos = 3; // QoS, 0-不做保证，即时推送
+  bytes payload = 4;
+}
+
+message PublishAck {
+  string topic = 1;
+  uint64 offset = 2;
+}
