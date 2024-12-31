@@ -12,6 +12,8 @@ service ProxyService {
   // 订阅权限校验
   rpc SubscribeAcl(SubscribeAclRequest) returns(SubscribeAclReply);
 
+  rpc OnConnected(OnConnectedRequest) returns (OnConnectedReply);
+ 
   rpc OnSubscribe(OnSubscribeRequest) returns (OnSubscribeReply);
 
   rpc OnUnsubscribe(OnUnsubscribeRequest) returns(OnUnsubscribeReply);
@@ -71,6 +73,11 @@ message SubscribeAclReply {
 
 }
 
+message OnConnectedRequest {
+}
+
+message OnConnectedReply{
+}
 
 message OnSubscribeRequest {
 

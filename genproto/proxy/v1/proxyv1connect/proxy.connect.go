@@ -41,6 +41,9 @@ const (
 	// ProxyServiceSubscribeAclProcedure is the fully-qualified name of the ProxyService's SubscribeAcl
 	// RPC.
 	ProxyServiceSubscribeAclProcedure = "/deeploop.proxy.v1.ProxyService/SubscribeAcl"
+	// ProxyServiceOnConnectedProcedure is the fully-qualified name of the ProxyService's OnConnected
+	// RPC.
+	ProxyServiceOnConnectedProcedure = "/deeploop.proxy.v1.ProxyService/OnConnected"
 	// ProxyServiceOnSubscribeProcedure is the fully-qualified name of the ProxyService's OnSubscribe
 	// RPC.
 	ProxyServiceOnSubscribeProcedure = "/deeploop.proxy.v1.ProxyService/OnSubscribe"
@@ -58,6 +61,7 @@ var (
 	proxyServiceRPCMethodDescriptor           = proxyServiceServiceDescriptor.Methods().ByName("RPC")
 	proxyServiceAuthenticateMethodDescriptor  = proxyServiceServiceDescriptor.Methods().ByName("Authenticate")
 	proxyServiceSubscribeAclMethodDescriptor  = proxyServiceServiceDescriptor.Methods().ByName("SubscribeAcl")
+	proxyServiceOnConnectedMethodDescriptor   = proxyServiceServiceDescriptor.Methods().ByName("OnConnected")
 	proxyServiceOnSubscribeMethodDescriptor   = proxyServiceServiceDescriptor.Methods().ByName("OnSubscribe")
 	proxyServiceOnUnsubscribeMethodDescriptor = proxyServiceServiceDescriptor.Methods().ByName("OnUnsubscribe")
 	proxyServiceOnDisconnectMethodDescriptor  = proxyServiceServiceDescriptor.Methods().ByName("OnDisconnect")
@@ -71,6 +75,7 @@ type ProxyServiceClient interface {
 	Authenticate(context.Context, *connect.Request[v1.AuthenticateRequest]) (*connect.Response[v1.AuthenticateReply], error)
 	// 订阅权限校验
 	SubscribeAcl(context.Context, *connect.Request[v1.SubscribeAclRequest]) (*connect.Response[v1.SubscribeAclReply], error)
+	OnConnected(context.Context, *connect.Request[v1.OnConnectedRequest]) (*connect.Response[v1.OnConnectedReply], error)
 	OnSubscribe(context.Context, *connect.Request[v1.OnSubscribeRequest]) (*connect.Response[v1.OnSubscribeReply], error)
 	OnUnsubscribe(context.Context, *connect.Request[v1.OnUnsubscribeRequest]) (*connect.Response[v1.OnUnsubscribeReply], error)
 	OnDisconnect(context.Context, *connect.Request[v1.OnDisconnectRequest]) (*connect.Response[v1.OnDisconnectReply], error)
@@ -104,6 +109,12 @@ func NewProxyServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			connect.WithSchema(proxyServiceSubscribeAclMethodDescriptor),
 			connect.WithClientOptions(opts...),
 		),
+		onConnected: connect.NewClient[v1.OnConnectedRequest, v1.OnConnectedReply](
+			httpClient,
+			baseURL+ProxyServiceOnConnectedProcedure,
+			connect.WithSchema(proxyServiceOnConnectedMethodDescriptor),
+			connect.WithClientOptions(opts...),
+		),
 		onSubscribe: connect.NewClient[v1.OnSubscribeRequest, v1.OnSubscribeReply](
 			httpClient,
 			baseURL+ProxyServiceOnSubscribeProcedure,
@@ -130,6 +141,7 @@ type proxyServiceClient struct {
 	rPC           *connect.Client[v1.RPCRequest, v1.RPCReply]
 	authenticate  *connect.Client[v1.AuthenticateRequest, v1.AuthenticateReply]
 	subscribeAcl  *connect.Client[v1.SubscribeAclRequest, v1.SubscribeAclReply]
+	onConnected   *connect.Client[v1.OnConnectedRequest, v1.OnConnectedReply]
 	onSubscribe   *connect.Client[v1.OnSubscribeRequest, v1.OnSubscribeReply]
 	onUnsubscribe *connect.Client[v1.OnUnsubscribeRequest, v1.OnUnsubscribeReply]
 	onDisconnect  *connect.Client[v1.OnDisconnectRequest, v1.OnDisconnectReply]
@@ -148,6 +160,11 @@ func (c *proxyServiceClient) Authenticate(ctx context.Context, req *connect.Requ
 // SubscribeAcl calls deeploop.proxy.v1.ProxyService.SubscribeAcl.
 func (c *proxyServiceClient) SubscribeAcl(ctx context.Context, req *connect.Request[v1.SubscribeAclRequest]) (*connect.Response[v1.SubscribeAclReply], error) {
 	return c.subscribeAcl.CallUnary(ctx, req)
+}
+
+// OnConnected calls deeploop.proxy.v1.ProxyService.OnConnected.
+func (c *proxyServiceClient) OnConnected(ctx context.Context, req *connect.Request[v1.OnConnectedRequest]) (*connect.Response[v1.OnConnectedReply], error) {
+	return c.onConnected.CallUnary(ctx, req)
 }
 
 // OnSubscribe calls deeploop.proxy.v1.ProxyService.OnSubscribe.
@@ -173,6 +190,7 @@ type ProxyServiceHandler interface {
 	Authenticate(context.Context, *connect.Request[v1.AuthenticateRequest]) (*connect.Response[v1.AuthenticateReply], error)
 	// 订阅权限校验
 	SubscribeAcl(context.Context, *connect.Request[v1.SubscribeAclRequest]) (*connect.Response[v1.SubscribeAclReply], error)
+	OnConnected(context.Context, *connect.Request[v1.OnConnectedRequest]) (*connect.Response[v1.OnConnectedReply], error)
 	OnSubscribe(context.Context, *connect.Request[v1.OnSubscribeRequest]) (*connect.Response[v1.OnSubscribeReply], error)
 	OnUnsubscribe(context.Context, *connect.Request[v1.OnUnsubscribeRequest]) (*connect.Response[v1.OnUnsubscribeReply], error)
 	OnDisconnect(context.Context, *connect.Request[v1.OnDisconnectRequest]) (*connect.Response[v1.OnDisconnectReply], error)
@@ -202,6 +220,12 @@ func NewProxyServiceHandler(svc ProxyServiceHandler, opts ...connect.HandlerOpti
 		connect.WithSchema(proxyServiceSubscribeAclMethodDescriptor),
 		connect.WithHandlerOptions(opts...),
 	)
+	proxyServiceOnConnectedHandler := connect.NewUnaryHandler(
+		ProxyServiceOnConnectedProcedure,
+		svc.OnConnected,
+		connect.WithSchema(proxyServiceOnConnectedMethodDescriptor),
+		connect.WithHandlerOptions(opts...),
+	)
 	proxyServiceOnSubscribeHandler := connect.NewUnaryHandler(
 		ProxyServiceOnSubscribeProcedure,
 		svc.OnSubscribe,
@@ -228,6 +252,8 @@ func NewProxyServiceHandler(svc ProxyServiceHandler, opts ...connect.HandlerOpti
 			proxyServiceAuthenticateHandler.ServeHTTP(w, r)
 		case ProxyServiceSubscribeAclProcedure:
 			proxyServiceSubscribeAclHandler.ServeHTTP(w, r)
+		case ProxyServiceOnConnectedProcedure:
+			proxyServiceOnConnectedHandler.ServeHTTP(w, r)
 		case ProxyServiceOnSubscribeProcedure:
 			proxyServiceOnSubscribeHandler.ServeHTTP(w, r)
 		case ProxyServiceOnUnsubscribeProcedure:
@@ -253,6 +279,10 @@ func (UnimplementedProxyServiceHandler) Authenticate(context.Context, *connect.R
 
 func (UnimplementedProxyServiceHandler) SubscribeAcl(context.Context, *connect.Request[v1.SubscribeAclRequest]) (*connect.Response[v1.SubscribeAclReply], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("deeploop.proxy.v1.ProxyService.SubscribeAcl is not implemented"))
+}
+
+func (UnimplementedProxyServiceHandler) OnConnected(context.Context, *connect.Request[v1.OnConnectedRequest]) (*connect.Response[v1.OnConnectedReply], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("deeploop.proxy.v1.ProxyService.OnConnected is not implemented"))
 }
 
 func (UnimplementedProxyServiceHandler) OnSubscribe(context.Context, *connect.Request[v1.OnSubscribeRequest]) (*connect.Response[v1.OnSubscribeReply], error) {
