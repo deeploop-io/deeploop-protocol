@@ -4,7 +4,7 @@ package deeploop.ssapi.v1;
 
 option go_package = "github.com/deeploop-io/deeploop-protocol/genproto/ssapi/v1;ssapiv1";
 
-service ServerSideService {
+service APIService {
   rpc Publish(PublishRequest) returns(PublishReply);
   rpc Disconnect(DisconnectRequest) returns(DisconnectReply);
   rpc Subscribe(SubscribeRequest) returns(SubscribeReply);

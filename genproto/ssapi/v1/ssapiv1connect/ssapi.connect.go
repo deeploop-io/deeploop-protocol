@@ -21,8 +21,8 @@ import (
 const _ = connect.IsAtLeastVersion1_13_0
 
 const (
-	// ServerSideServiceName is the fully-qualified name of the ServerSideService service.
-	ServerSideServiceName = "deeploop.ssapi.v1.ServerSideService"
+	// APIServiceName is the fully-qualified name of the APIService service.
+	APIServiceName = "deeploop.ssapi.v1.APIService"
 )
 
 // These constants are the fully-qualified names of the RPCs defined in this package. They're
@@ -33,171 +33,167 @@ const (
 // reflection-formatted method names, remove the leading slash and convert the remaining slash to a
 // period.
 const (
-	// ServerSideServicePublishProcedure is the fully-qualified name of the ServerSideService's Publish
-	// RPC.
-	ServerSideServicePublishProcedure = "/deeploop.ssapi.v1.ServerSideService/Publish"
-	// ServerSideServiceDisconnectProcedure is the fully-qualified name of the ServerSideService's
-	// Disconnect RPC.
-	ServerSideServiceDisconnectProcedure = "/deeploop.ssapi.v1.ServerSideService/Disconnect"
-	// ServerSideServiceSubscribeProcedure is the fully-qualified name of the ServerSideService's
-	// Subscribe RPC.
-	ServerSideServiceSubscribeProcedure = "/deeploop.ssapi.v1.ServerSideService/Subscribe"
-	// ServerSideServiceUnsubscribeProcedure is the fully-qualified name of the ServerSideService's
-	// Unsubscribe RPC.
-	ServerSideServiceUnsubscribeProcedure = "/deeploop.ssapi.v1.ServerSideService/Unsubscribe"
+	// APIServicePublishProcedure is the fully-qualified name of the APIService's Publish RPC.
+	APIServicePublishProcedure = "/deeploop.ssapi.v1.APIService/Publish"
+	// APIServiceDisconnectProcedure is the fully-qualified name of the APIService's Disconnect RPC.
+	APIServiceDisconnectProcedure = "/deeploop.ssapi.v1.APIService/Disconnect"
+	// APIServiceSubscribeProcedure is the fully-qualified name of the APIService's Subscribe RPC.
+	APIServiceSubscribeProcedure = "/deeploop.ssapi.v1.APIService/Subscribe"
+	// APIServiceUnsubscribeProcedure is the fully-qualified name of the APIService's Unsubscribe RPC.
+	APIServiceUnsubscribeProcedure = "/deeploop.ssapi.v1.APIService/Unsubscribe"
 )
 
 // These variables are the protoreflect.Descriptor objects for the RPCs defined in this package.
 var (
-	serverSideServiceServiceDescriptor           = v1.File_ssapi_v1_ssapi_proto.Services().ByName("ServerSideService")
-	serverSideServicePublishMethodDescriptor     = serverSideServiceServiceDescriptor.Methods().ByName("Publish")
-	serverSideServiceDisconnectMethodDescriptor  = serverSideServiceServiceDescriptor.Methods().ByName("Disconnect")
-	serverSideServiceSubscribeMethodDescriptor   = serverSideServiceServiceDescriptor.Methods().ByName("Subscribe")
-	serverSideServiceUnsubscribeMethodDescriptor = serverSideServiceServiceDescriptor.Methods().ByName("Unsubscribe")
+	aPIServiceServiceDescriptor           = v1.File_ssapi_v1_ssapi_proto.Services().ByName("APIService")
+	aPIServicePublishMethodDescriptor     = aPIServiceServiceDescriptor.Methods().ByName("Publish")
+	aPIServiceDisconnectMethodDescriptor  = aPIServiceServiceDescriptor.Methods().ByName("Disconnect")
+	aPIServiceSubscribeMethodDescriptor   = aPIServiceServiceDescriptor.Methods().ByName("Subscribe")
+	aPIServiceUnsubscribeMethodDescriptor = aPIServiceServiceDescriptor.Methods().ByName("Unsubscribe")
 )
 
-// ServerSideServiceClient is a client for the deeploop.ssapi.v1.ServerSideService service.
-type ServerSideServiceClient interface {
+// APIServiceClient is a client for the deeploop.ssapi.v1.APIService service.
+type APIServiceClient interface {
 	Publish(context.Context, *connect.Request[v1.PublishRequest]) (*connect.Response[v1.PublishReply], error)
 	Disconnect(context.Context, *connect.Request[v1.DisconnectRequest]) (*connect.Response[v1.DisconnectReply], error)
 	Subscribe(context.Context, *connect.Request[v1.SubscribeRequest]) (*connect.Response[v1.SubscribeReply], error)
 	Unsubscribe(context.Context, *connect.Request[v1.SubscribeRequest]) (*connect.Response[v1.UnsubscribeReply], error)
 }
 
-// NewServerSideServiceClient constructs a client for the deeploop.ssapi.v1.ServerSideService
-// service. By default, it uses the Connect protocol with the binary Protobuf Codec, asks for
-// gzipped responses, and sends uncompressed requests. To use the gRPC or gRPC-Web protocols, supply
-// the connect.WithGRPC() or connect.WithGRPCWeb() options.
+// NewAPIServiceClient constructs a client for the deeploop.ssapi.v1.APIService service. By default,
+// it uses the Connect protocol with the binary Protobuf Codec, asks for gzipped responses, and
+// sends uncompressed requests. To use the gRPC or gRPC-Web protocols, supply the connect.WithGRPC()
+// or connect.WithGRPCWeb() options.
 //
 // The URL supplied here should be the base URL for the Connect or gRPC server (for example,
 // http://api.acme.com or https://acme.com/grpc).
-func NewServerSideServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) ServerSideServiceClient {
+func NewAPIServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) APIServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
-	return &serverSideServiceClient{
+	return &aPIServiceClient{
 		publish: connect.NewClient[v1.PublishRequest, v1.PublishReply](
 			httpClient,
-			baseURL+ServerSideServicePublishProcedure,
-			connect.WithSchema(serverSideServicePublishMethodDescriptor),
+			baseURL+APIServicePublishProcedure,
+			connect.WithSchema(aPIServicePublishMethodDescriptor),
 			connect.WithClientOptions(opts...),
 		),
 		disconnect: connect.NewClient[v1.DisconnectRequest, v1.DisconnectReply](
 			httpClient,
-			baseURL+ServerSideServiceDisconnectProcedure,
-			connect.WithSchema(serverSideServiceDisconnectMethodDescriptor),
+			baseURL+APIServiceDisconnectProcedure,
+			connect.WithSchema(aPIServiceDisconnectMethodDescriptor),
 			connect.WithClientOptions(opts...),
 		),
 		subscribe: connect.NewClient[v1.SubscribeRequest, v1.SubscribeReply](
 			httpClient,
-			baseURL+ServerSideServiceSubscribeProcedure,
-			connect.WithSchema(serverSideServiceSubscribeMethodDescriptor),
+			baseURL+APIServiceSubscribeProcedure,
+			connect.WithSchema(aPIServiceSubscribeMethodDescriptor),
 			connect.WithClientOptions(opts...),
 		),
 		unsubscribe: connect.NewClient[v1.SubscribeRequest, v1.UnsubscribeReply](
 			httpClient,
-			baseURL+ServerSideServiceUnsubscribeProcedure,
-			connect.WithSchema(serverSideServiceUnsubscribeMethodDescriptor),
+			baseURL+APIServiceUnsubscribeProcedure,
+			connect.WithSchema(aPIServiceUnsubscribeMethodDescriptor),
 			connect.WithClientOptions(opts...),
 		),
 	}
 }
 
-// serverSideServiceClient implements ServerSideServiceClient.
-type serverSideServiceClient struct {
+// aPIServiceClient implements APIServiceClient.
+type aPIServiceClient struct {
 	publish     *connect.Client[v1.PublishRequest, v1.PublishReply]
 	disconnect  *connect.Client[v1.DisconnectRequest, v1.DisconnectReply]
 	subscribe   *connect.Client[v1.SubscribeRequest, v1.SubscribeReply]
 	unsubscribe *connect.Client[v1.SubscribeRequest, v1.UnsubscribeReply]
 }
 
-// Publish calls deeploop.ssapi.v1.ServerSideService.Publish.
-func (c *serverSideServiceClient) Publish(ctx context.Context, req *connect.Request[v1.PublishRequest]) (*connect.Response[v1.PublishReply], error) {
+// Publish calls deeploop.ssapi.v1.APIService.Publish.
+func (c *aPIServiceClient) Publish(ctx context.Context, req *connect.Request[v1.PublishRequest]) (*connect.Response[v1.PublishReply], error) {
 	return c.publish.CallUnary(ctx, req)
 }
 
-// Disconnect calls deeploop.ssapi.v1.ServerSideService.Disconnect.
-func (c *serverSideServiceClient) Disconnect(ctx context.Context, req *connect.Request[v1.DisconnectRequest]) (*connect.Response[v1.DisconnectReply], error) {
+// Disconnect calls deeploop.ssapi.v1.APIService.Disconnect.
+func (c *aPIServiceClient) Disconnect(ctx context.Context, req *connect.Request[v1.DisconnectRequest]) (*connect.Response[v1.DisconnectReply], error) {
 	return c.disconnect.CallUnary(ctx, req)
 }
 
-// Subscribe calls deeploop.ssapi.v1.ServerSideService.Subscribe.
-func (c *serverSideServiceClient) Subscribe(ctx context.Context, req *connect.Request[v1.SubscribeRequest]) (*connect.Response[v1.SubscribeReply], error) {
+// Subscribe calls deeploop.ssapi.v1.APIService.Subscribe.
+func (c *aPIServiceClient) Subscribe(ctx context.Context, req *connect.Request[v1.SubscribeRequest]) (*connect.Response[v1.SubscribeReply], error) {
 	return c.subscribe.CallUnary(ctx, req)
 }
 
-// Unsubscribe calls deeploop.ssapi.v1.ServerSideService.Unsubscribe.
-func (c *serverSideServiceClient) Unsubscribe(ctx context.Context, req *connect.Request[v1.SubscribeRequest]) (*connect.Response[v1.UnsubscribeReply], error) {
+// Unsubscribe calls deeploop.ssapi.v1.APIService.Unsubscribe.
+func (c *aPIServiceClient) Unsubscribe(ctx context.Context, req *connect.Request[v1.SubscribeRequest]) (*connect.Response[v1.UnsubscribeReply], error) {
 	return c.unsubscribe.CallUnary(ctx, req)
 }
 
-// ServerSideServiceHandler is an implementation of the deeploop.ssapi.v1.ServerSideService service.
-type ServerSideServiceHandler interface {
+// APIServiceHandler is an implementation of the deeploop.ssapi.v1.APIService service.
+type APIServiceHandler interface {
 	Publish(context.Context, *connect.Request[v1.PublishRequest]) (*connect.Response[v1.PublishReply], error)
 	Disconnect(context.Context, *connect.Request[v1.DisconnectRequest]) (*connect.Response[v1.DisconnectReply], error)
 	Subscribe(context.Context, *connect.Request[v1.SubscribeRequest]) (*connect.Response[v1.SubscribeReply], error)
 	Unsubscribe(context.Context, *connect.Request[v1.SubscribeRequest]) (*connect.Response[v1.UnsubscribeReply], error)
 }
 
-// NewServerSideServiceHandler builds an HTTP handler from the service implementation. It returns
-// the path on which to mount the handler and the handler itself.
+// NewAPIServiceHandler builds an HTTP handler from the service implementation. It returns the path
+// on which to mount the handler and the handler itself.
 //
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
-func NewServerSideServiceHandler(svc ServerSideServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
-	serverSideServicePublishHandler := connect.NewUnaryHandler(
-		ServerSideServicePublishProcedure,
+func NewAPIServiceHandler(svc APIServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
+	aPIServicePublishHandler := connect.NewUnaryHandler(
+		APIServicePublishProcedure,
 		svc.Publish,
-		connect.WithSchema(serverSideServicePublishMethodDescriptor),
+		connect.WithSchema(aPIServicePublishMethodDescriptor),
 		connect.WithHandlerOptions(opts...),
 	)
-	serverSideServiceDisconnectHandler := connect.NewUnaryHandler(
-		ServerSideServiceDisconnectProcedure,
+	aPIServiceDisconnectHandler := connect.NewUnaryHandler(
+		APIServiceDisconnectProcedure,
 		svc.Disconnect,
-		connect.WithSchema(serverSideServiceDisconnectMethodDescriptor),
+		connect.WithSchema(aPIServiceDisconnectMethodDescriptor),
 		connect.WithHandlerOptions(opts...),
 	)
-	serverSideServiceSubscribeHandler := connect.NewUnaryHandler(
-		ServerSideServiceSubscribeProcedure,
+	aPIServiceSubscribeHandler := connect.NewUnaryHandler(
+		APIServiceSubscribeProcedure,
 		svc.Subscribe,
-		connect.WithSchema(serverSideServiceSubscribeMethodDescriptor),
+		connect.WithSchema(aPIServiceSubscribeMethodDescriptor),
 		connect.WithHandlerOptions(opts...),
 	)
-	serverSideServiceUnsubscribeHandler := connect.NewUnaryHandler(
-		ServerSideServiceUnsubscribeProcedure,
+	aPIServiceUnsubscribeHandler := connect.NewUnaryHandler(
+		APIServiceUnsubscribeProcedure,
 		svc.Unsubscribe,
-		connect.WithSchema(serverSideServiceUnsubscribeMethodDescriptor),
+		connect.WithSchema(aPIServiceUnsubscribeMethodDescriptor),
 		connect.WithHandlerOptions(opts...),
 	)
-	return "/deeploop.ssapi.v1.ServerSideService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	return "/deeploop.ssapi.v1.APIService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
-		case ServerSideServicePublishProcedure:
-			serverSideServicePublishHandler.ServeHTTP(w, r)
-		case ServerSideServiceDisconnectProcedure:
-			serverSideServiceDisconnectHandler.ServeHTTP(w, r)
-		case ServerSideServiceSubscribeProcedure:
-			serverSideServiceSubscribeHandler.ServeHTTP(w, r)
-		case ServerSideServiceUnsubscribeProcedure:
-			serverSideServiceUnsubscribeHandler.ServeHTTP(w, r)
+		case APIServicePublishProcedure:
+			aPIServicePublishHandler.ServeHTTP(w, r)
+		case APIServiceDisconnectProcedure:
+			aPIServiceDisconnectHandler.ServeHTTP(w, r)
+		case APIServiceSubscribeProcedure:
+			aPIServiceSubscribeHandler.ServeHTTP(w, r)
+		case APIServiceUnsubscribeProcedure:
+			aPIServiceUnsubscribeHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
 	})
 }
 
-// UnimplementedServerSideServiceHandler returns CodeUnimplemented from all methods.
-type UnimplementedServerSideServiceHandler struct{}
+// UnimplementedAPIServiceHandler returns CodeUnimplemented from all methods.
+type UnimplementedAPIServiceHandler struct{}
 
-func (UnimplementedServerSideServiceHandler) Publish(context.Context, *connect.Request[v1.PublishRequest]) (*connect.Response[v1.PublishReply], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("deeploop.ssapi.v1.ServerSideService.Publish is not implemented"))
+func (UnimplementedAPIServiceHandler) Publish(context.Context, *connect.Request[v1.PublishRequest]) (*connect.Response[v1.PublishReply], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("deeploop.ssapi.v1.APIService.Publish is not implemented"))
 }
 
-func (UnimplementedServerSideServiceHandler) Disconnect(context.Context, *connect.Request[v1.DisconnectRequest]) (*connect.Response[v1.DisconnectReply], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("deeploop.ssapi.v1.ServerSideService.Disconnect is not implemented"))
+func (UnimplementedAPIServiceHandler) Disconnect(context.Context, *connect.Request[v1.DisconnectRequest]) (*connect.Response[v1.DisconnectReply], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("deeploop.ssapi.v1.APIService.Disconnect is not implemented"))
 }
 
-func (UnimplementedServerSideServiceHandler) Subscribe(context.Context, *connect.Request[v1.SubscribeRequest]) (*connect.Response[v1.SubscribeReply], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("deeploop.ssapi.v1.ServerSideService.Subscribe is not implemented"))
+func (UnimplementedAPIServiceHandler) Subscribe(context.Context, *connect.Request[v1.SubscribeRequest]) (*connect.Response[v1.SubscribeReply], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("deeploop.ssapi.v1.APIService.Subscribe is not implemented"))
 }
 
-func (UnimplementedServerSideServiceHandler) Unsubscribe(context.Context, *connect.Request[v1.SubscribeRequest]) (*connect.Response[v1.UnsubscribeReply], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("deeploop.ssapi.v1.ServerSideService.Unsubscribe is not implemented"))
+func (UnimplementedAPIServiceHandler) Unsubscribe(context.Context, *connect.Request[v1.SubscribeRequest]) (*connect.Response[v1.UnsubscribeReply], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("deeploop.ssapi.v1.APIService.Unsubscribe is not implemented"))
 }
