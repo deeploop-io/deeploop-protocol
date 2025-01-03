@@ -76,6 +76,7 @@ message SubscribeAclReply {
 
 message OnConnectedRequest {
   string session_id = 1;
+  string username = 2;
 }
 
 message OnConnectedReply{
@@ -98,6 +99,7 @@ message OnUnsubscribeReply {
 
 message OnDisconnectedRequest {
   string session_id = 1;
+  string username = 2;
 
 }
 message OnDisconnectedReply {

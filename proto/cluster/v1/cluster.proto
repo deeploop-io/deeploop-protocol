@@ -29,7 +29,7 @@ message SendMessage {
   uint64 time = 3;
   uint64 offset = 4;
   deeploop.common.v1.QoS qos = 5;
-  repeated string node_ids = 6;
+  string type = 6;
   bytes payload = 7;
 }
 
