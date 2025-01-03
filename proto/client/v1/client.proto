@@ -157,7 +157,8 @@ message Pong {
 }
 
 message Publish {
-  string topic = 2;
+  string topic = 1;
+  string type = 2;
   deeploop.common.v1.QoS qos = 3; // QoS, 0-不做保证，即时推送
   bytes payload = 4;
 }
