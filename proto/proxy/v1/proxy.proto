@@ -34,7 +34,7 @@ message RPCRequest {
     string balancer = 1;
     string key = 2;
   }
-  uint64 id = 1;
+  string id = 1;
   string topic = 2;
   string method = 3;
   Metadata metadata = 4;
@@ -42,7 +42,7 @@ message RPCRequest {
 }
 
 message RPCReply {
-  uint64 id = 1;
+  string id = 1;
   Error error = 2;
   bytes payload = 3;
 }
@@ -75,7 +75,7 @@ message SubscribeAclReply {
 }
 
 message OnConnectedRequest {
-  uint64 session_id = 1;
+  string session_id = 1;
 }
 
 message OnConnectedReply{
@@ -97,7 +97,7 @@ message OnUnsubscribeReply {
 }
 
 message OnDisconnectedRequest {
-  uint64 session_id = 1;
+  string session_id = 1;
 
 }
 message OnDisconnectedReply {

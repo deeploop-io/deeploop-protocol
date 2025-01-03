@@ -8,23 +8,23 @@ import "common/v1/common.proto";
 
 message BroadcastMessage {
 
-  uint64 id = 1;
+  string id = 1;
   string topic = 2;
-  uint64 sender = 3;
+  string sender = 3;
   deeploop.common.v1.QoS qos = 4;
   bytes payload = 5;
 }
 
 message PublishMessage {
-  uint64 id = 1;
+  string id = 1;
   string topic = 2;
-  uint64 sender = 3;
+  string sender = 3;
   deeploop.common.v1.QoS qos = 4;
   bytes payload = 5;
 }
 
 message SendMessage {
-  uint64 id = 1;
+  string id = 1;
   string topic = 2;
   uint64 time = 3;
   uint64 offset = 4;
@@ -34,12 +34,12 @@ message SendMessage {
 }
 
 message KeepAliveMessage {
-  uint64 session_id = 1;
+  string session_id = 1;
   uint64 time = 2;
 }
 
 message SubscribeRequest {
-  uint64 session_id = 1;
+  string session_id = 1;
   repeated string topics = 2;
 }
 
@@ -49,7 +49,7 @@ message SubscribeResult {
 }
 
 message UnsubscribeRequest {
-  uint64 session_id = 1;
+  string session_id = 1;
   repeated string topics = 2;
 }
 

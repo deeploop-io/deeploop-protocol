@@ -12,7 +12,7 @@ service APIService {
 }
 
 message PublishRequest {
-  uint64 id = 1;
+  string id = 1;
   string topic = 2;
   string type = 3;
   map<string, string> headers = 4;
