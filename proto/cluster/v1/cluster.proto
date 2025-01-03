@@ -12,7 +12,8 @@ message PushMessage {
   string topic = 2;
   string sender = 3;
   deeploop.common.v1.QoS qos = 4;
-  bytes payload = 5;
+  string type = 5;
+  bytes payload = 6;
 }
 
 message BroadcastMessage {
@@ -20,7 +21,8 @@ message BroadcastMessage {
   string topic = 2;
   string sender = 3;
   deeploop.common.v1.QoS qos = 4;
-  bytes payload = 5;
+  string type = 5;
+  bytes payload = 6;
 }
 
 message SendMessage {
