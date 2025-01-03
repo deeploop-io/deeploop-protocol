@@ -75,6 +75,7 @@ message SubscribeAclReply {
 }
 
 message OnConnectedRequest {
+  uint64 session_id = 1;
 }
 
 message OnConnectedReply{
@@ -96,6 +97,7 @@ message OnUnsubscribeReply {
 }
 
 message OnDisconnectedRequest {
+  uint64 session_id = 1;
 
 }
 message OnDisconnectedReply {
