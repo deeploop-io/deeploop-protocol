@@ -18,7 +18,7 @@ service ProxyService {
 
   rpc OnUnsubscribe(OnUnsubscribeRequest) returns(OnUnsubscribeReply);
 
-  rpc OnDisconnect(OnDisconnectRequest) returns(OnDisconnectReply);
+  rpc OnDisconnected(OnDisconnectedRequest) returns(OnDisconnectedReply);
 }
 
 
@@ -95,9 +95,9 @@ message OnUnsubscribeReply {
 
 }
 
-message OnDisconnectRequest {
+message OnDisconnectedRequest {
 
 }
-message OnDisconnectReply {
+message OnDisconnectedReply {
 
 }

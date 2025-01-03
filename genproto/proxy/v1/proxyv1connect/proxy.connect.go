@@ -50,21 +50,21 @@ const (
 	// ProxyServiceOnUnsubscribeProcedure is the fully-qualified name of the ProxyService's
 	// OnUnsubscribe RPC.
 	ProxyServiceOnUnsubscribeProcedure = "/deeploop.proxy.v1.ProxyService/OnUnsubscribe"
-	// ProxyServiceOnDisconnectProcedure is the fully-qualified name of the ProxyService's OnDisconnect
-	// RPC.
-	ProxyServiceOnDisconnectProcedure = "/deeploop.proxy.v1.ProxyService/OnDisconnect"
+	// ProxyServiceOnDisconnectedProcedure is the fully-qualified name of the ProxyService's
+	// OnDisconnected RPC.
+	ProxyServiceOnDisconnectedProcedure = "/deeploop.proxy.v1.ProxyService/OnDisconnected"
 )
 
 // These variables are the protoreflect.Descriptor objects for the RPCs defined in this package.
 var (
-	proxyServiceServiceDescriptor             = v1.File_proxy_v1_proxy_proto.Services().ByName("ProxyService")
-	proxyServiceRPCMethodDescriptor           = proxyServiceServiceDescriptor.Methods().ByName("RPC")
-	proxyServiceAuthenticateMethodDescriptor  = proxyServiceServiceDescriptor.Methods().ByName("Authenticate")
-	proxyServiceSubscribeAclMethodDescriptor  = proxyServiceServiceDescriptor.Methods().ByName("SubscribeAcl")
-	proxyServiceOnConnectedMethodDescriptor   = proxyServiceServiceDescriptor.Methods().ByName("OnConnected")
-	proxyServiceOnSubscribeMethodDescriptor   = proxyServiceServiceDescriptor.Methods().ByName("OnSubscribe")
-	proxyServiceOnUnsubscribeMethodDescriptor = proxyServiceServiceDescriptor.Methods().ByName("OnUnsubscribe")
-	proxyServiceOnDisconnectMethodDescriptor  = proxyServiceServiceDescriptor.Methods().ByName("OnDisconnect")
+	proxyServiceServiceDescriptor              = v1.File_proxy_v1_proxy_proto.Services().ByName("ProxyService")
+	proxyServiceRPCMethodDescriptor            = proxyServiceServiceDescriptor.Methods().ByName("RPC")
+	proxyServiceAuthenticateMethodDescriptor   = proxyServiceServiceDescriptor.Methods().ByName("Authenticate")
+	proxyServiceSubscribeAclMethodDescriptor   = proxyServiceServiceDescriptor.Methods().ByName("SubscribeAcl")
+	proxyServiceOnConnectedMethodDescriptor    = proxyServiceServiceDescriptor.Methods().ByName("OnConnected")
+	proxyServiceOnSubscribeMethodDescriptor    = proxyServiceServiceDescriptor.Methods().ByName("OnSubscribe")
+	proxyServiceOnUnsubscribeMethodDescriptor  = proxyServiceServiceDescriptor.Methods().ByName("OnUnsubscribe")
+	proxyServiceOnDisconnectedMethodDescriptor = proxyServiceServiceDescriptor.Methods().ByName("OnDisconnected")
 )
 
 // ProxyServiceClient is a client for the deeploop.proxy.v1.ProxyService service.
@@ -78,7 +78,7 @@ type ProxyServiceClient interface {
 	OnConnected(context.Context, *connect.Request[v1.OnConnectedRequest]) (*connect.Response[v1.OnConnectedReply], error)
 	OnSubscribe(context.Context, *connect.Request[v1.OnSubscribeRequest]) (*connect.Response[v1.OnSubscribeReply], error)
 	OnUnsubscribe(context.Context, *connect.Request[v1.OnUnsubscribeRequest]) (*connect.Response[v1.OnUnsubscribeReply], error)
-	OnDisconnect(context.Context, *connect.Request[v1.OnDisconnectRequest]) (*connect.Response[v1.OnDisconnectReply], error)
+	OnDisconnected(context.Context, *connect.Request[v1.OnDisconnectedRequest]) (*connect.Response[v1.OnDisconnectedReply], error)
 }
 
 // NewProxyServiceClient constructs a client for the deeploop.proxy.v1.ProxyService service. By
@@ -127,10 +127,10 @@ func NewProxyServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			connect.WithSchema(proxyServiceOnUnsubscribeMethodDescriptor),
 			connect.WithClientOptions(opts...),
 		),
-		onDisconnect: connect.NewClient[v1.OnDisconnectRequest, v1.OnDisconnectReply](
+		onDisconnected: connect.NewClient[v1.OnDisconnectedRequest, v1.OnDisconnectedReply](
 			httpClient,
-			baseURL+ProxyServiceOnDisconnectProcedure,
-			connect.WithSchema(proxyServiceOnDisconnectMethodDescriptor),
+			baseURL+ProxyServiceOnDisconnectedProcedure,
+			connect.WithSchema(proxyServiceOnDisconnectedMethodDescriptor),
 			connect.WithClientOptions(opts...),
 		),
 	}
@@ -138,13 +138,13 @@ func NewProxyServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 
 // proxyServiceClient implements ProxyServiceClient.
 type proxyServiceClient struct {
-	rPC           *connect.Client[v1.RPCRequest, v1.RPCReply]
-	authenticate  *connect.Client[v1.AuthenticateRequest, v1.AuthenticateReply]
-	subscribeAcl  *connect.Client[v1.SubscribeAclRequest, v1.SubscribeAclReply]
-	onConnected   *connect.Client[v1.OnConnectedRequest, v1.OnConnectedReply]
-	onSubscribe   *connect.Client[v1.OnSubscribeRequest, v1.OnSubscribeReply]
-	onUnsubscribe *connect.Client[v1.OnUnsubscribeRequest, v1.OnUnsubscribeReply]
-	onDisconnect  *connect.Client[v1.OnDisconnectRequest, v1.OnDisconnectReply]
+	rPC            *connect.Client[v1.RPCRequest, v1.RPCReply]
+	authenticate   *connect.Client[v1.AuthenticateRequest, v1.AuthenticateReply]
+	subscribeAcl   *connect.Client[v1.SubscribeAclRequest, v1.SubscribeAclReply]
+	onConnected    *connect.Client[v1.OnConnectedRequest, v1.OnConnectedReply]
+	onSubscribe    *connect.Client[v1.OnSubscribeRequest, v1.OnSubscribeReply]
+	onUnsubscribe  *connect.Client[v1.OnUnsubscribeRequest, v1.OnUnsubscribeReply]
+	onDisconnected *connect.Client[v1.OnDisconnectedRequest, v1.OnDisconnectedReply]
 }
 
 // RPC calls deeploop.proxy.v1.ProxyService.RPC.
@@ -177,9 +177,9 @@ func (c *proxyServiceClient) OnUnsubscribe(ctx context.Context, req *connect.Req
 	return c.onUnsubscribe.CallUnary(ctx, req)
 }
 
-// OnDisconnect calls deeploop.proxy.v1.ProxyService.OnDisconnect.
-func (c *proxyServiceClient) OnDisconnect(ctx context.Context, req *connect.Request[v1.OnDisconnectRequest]) (*connect.Response[v1.OnDisconnectReply], error) {
-	return c.onDisconnect.CallUnary(ctx, req)
+// OnDisconnected calls deeploop.proxy.v1.ProxyService.OnDisconnected.
+func (c *proxyServiceClient) OnDisconnected(ctx context.Context, req *connect.Request[v1.OnDisconnectedRequest]) (*connect.Response[v1.OnDisconnectedReply], error) {
+	return c.onDisconnected.CallUnary(ctx, req)
 }
 
 // ProxyServiceHandler is an implementation of the deeploop.proxy.v1.ProxyService service.
@@ -193,7 +193,7 @@ type ProxyServiceHandler interface {
 	OnConnected(context.Context, *connect.Request[v1.OnConnectedRequest]) (*connect.Response[v1.OnConnectedReply], error)
 	OnSubscribe(context.Context, *connect.Request[v1.OnSubscribeRequest]) (*connect.Response[v1.OnSubscribeReply], error)
 	OnUnsubscribe(context.Context, *connect.Request[v1.OnUnsubscribeRequest]) (*connect.Response[v1.OnUnsubscribeReply], error)
-	OnDisconnect(context.Context, *connect.Request[v1.OnDisconnectRequest]) (*connect.Response[v1.OnDisconnectReply], error)
+	OnDisconnected(context.Context, *connect.Request[v1.OnDisconnectedRequest]) (*connect.Response[v1.OnDisconnectedReply], error)
 }
 
 // NewProxyServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -238,10 +238,10 @@ func NewProxyServiceHandler(svc ProxyServiceHandler, opts ...connect.HandlerOpti
 		connect.WithSchema(proxyServiceOnUnsubscribeMethodDescriptor),
 		connect.WithHandlerOptions(opts...),
 	)
-	proxyServiceOnDisconnectHandler := connect.NewUnaryHandler(
-		ProxyServiceOnDisconnectProcedure,
-		svc.OnDisconnect,
-		connect.WithSchema(proxyServiceOnDisconnectMethodDescriptor),
+	proxyServiceOnDisconnectedHandler := connect.NewUnaryHandler(
+		ProxyServiceOnDisconnectedProcedure,
+		svc.OnDisconnected,
+		connect.WithSchema(proxyServiceOnDisconnectedMethodDescriptor),
 		connect.WithHandlerOptions(opts...),
 	)
 	return "/deeploop.proxy.v1.ProxyService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -258,8 +258,8 @@ func NewProxyServiceHandler(svc ProxyServiceHandler, opts ...connect.HandlerOpti
 			proxyServiceOnSubscribeHandler.ServeHTTP(w, r)
 		case ProxyServiceOnUnsubscribeProcedure:
 			proxyServiceOnUnsubscribeHandler.ServeHTTP(w, r)
-		case ProxyServiceOnDisconnectProcedure:
-			proxyServiceOnDisconnectHandler.ServeHTTP(w, r)
+		case ProxyServiceOnDisconnectedProcedure:
+			proxyServiceOnDisconnectedHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -293,6 +293,6 @@ func (UnimplementedProxyServiceHandler) OnUnsubscribe(context.Context, *connect.
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("deeploop.proxy.v1.ProxyService.OnUnsubscribe is not implemented"))
 }
 
-func (UnimplementedProxyServiceHandler) OnDisconnect(context.Context, *connect.Request[v1.OnDisconnectRequest]) (*connect.Response[v1.OnDisconnectReply], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("deeploop.proxy.v1.ProxyService.OnDisconnect is not implemented"))
+func (UnimplementedProxyServiceHandler) OnDisconnected(context.Context, *connect.Request[v1.OnDisconnectedRequest]) (*connect.Response[v1.OnDisconnectedReply], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("deeploop.proxy.v1.ProxyService.OnDisconnected is not implemented"))
 }
