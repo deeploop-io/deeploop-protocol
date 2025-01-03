@@ -6,7 +6,7 @@ option go_package = "github.com/deeploop-io/deeploop-protocol/genproto/cluster/v
 
 import "common/v1/common.proto";
 
-message BroadcastMessage {
+message PushMessage {
 
   string id = 1;
   string topic = 2;
@@ -15,7 +15,7 @@ message BroadcastMessage {
   bytes payload = 5;
 }
 
-message PublishMessage {
+message BroadcastMessage {
   string id = 1;
   string topic = 2;
   string sender = 3;
